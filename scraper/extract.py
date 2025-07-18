@@ -1,22 +1,24 @@
 # scraper/extract.py
 
 """
-Parse product data from the saved BooksToScrape HTML.
-Uses Selectolax for fast, clean extraction.
+Parse product data from the saved BooksToScrape HTML
+and export the results to a timestamped CSV file.
 """
 
 from selectolax.parser import HTMLParser
 from pathlib import Path
 from typing import List, Dict
 from urllib.parse import urljoin
+from datetime import datetime
+import csv
 
 
 BASE_URL = "https://books.toscrape.com/"
 HTML_FILE = Path("extras/homepage_2025-07-17_21-33.html")  # Adjust if needed
+OUTPUT_DIR = Path("output")
 
 
 def extract_books_from_html(html: str) -> List[Dict]:
-    """Extract book data from the homepage HTML."""
     tree = HTMLParser(html)
     books = []
 
@@ -44,8 +46,21 @@ def extract_books_from_html(html: str) -> List[Dict]:
     return books
 
 
+def write_books_to_csv(books: List[Dict]):
+    OUTPUT_DIR.mkdir(exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    filename = OUTPUT_DIR / f"books_{timestamp}.csv"
+
+    with open(filename, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=books[0].keys())
+        writer.writeheader()
+        writer.writerows(books)
+
+    print(f"[+] Saved {len(books)} books to {filename}")
+
+
 def load_html_from_file(filepath: Path) -> str:
-    """Load HTML content from a local file."""
     with open(filepath, "r", encoding="utf-8") as f:
         return f.read()
 
@@ -53,9 +68,7 @@ def load_html_from_file(filepath: Path) -> str:
 def main():
     html = load_html_from_file(HTML_FILE)
     books = extract_books_from_html(html)
-
-    for book in books:
-        print(book)
+    write_books_to_csv(books)
 
 
 if __name__ == "__main__":
