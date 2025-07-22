@@ -4,6 +4,7 @@ import csv
 from datetime import datetime
 from pathlib import Path
 from config import OUTPUT_DIR, CSV_FILENAME_TEMPLATE
+from typing import List, Dict
 
 
 def ensure_output_dir_exists():
@@ -18,7 +19,7 @@ def generate_timestamped_filename(template: str) -> Path:
     return OUTPUT_DIR / filename
 
 
-def save_to_csv(data: list[dict], template: str = CSV_FILENAME_TEMPLATE) -> Path:
+def save_to_csv(data: List[Dict], template: str = CSV_FILENAME_TEMPLATE) -> Path:
     """
     Save a list of dictionaries to a timestamped CSV file in the output directory.
 
@@ -37,3 +38,9 @@ def save_to_csv(data: list[dict], template: str = CSV_FILENAME_TEMPLATE) -> Path
 
     print(f"✅ Data saved to {filepath}")
     return filepath
+
+
+def load_html_from_file(filepath: Path) -> str:
+    """Read the contents of a local HTML file and return it as a string."""
+    with open(filepath, "r", encoding="utf-8") as f:
+        return f.read()
