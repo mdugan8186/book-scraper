@@ -1,45 +1,30 @@
-# scraper/capture.py
-
-"""
-Capture raw HTML from BooksToScrape for parsing and inspection.
-Saves the HTML with a timestamped filename in the extras/ folder.
-"""
+# ==== capture.py ====
 
 import requests
-from pathlib import Path
 from datetime import datetime
+from config import BASE_URL, HEADERS, RAW_HTML_TEMPLATE, OUTPUT_DIR
 
 
-URL = "https://books.toscrape.com/"
-SAVE_DIR = Path("extras")
-
-
-def fetch_html(url: str) -> str:
-    """Fetch the raw HTML content from a given URL."""
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.text
-
-
-def save_html(content: str, label: str = "homepage") -> str:
-    """Save HTML content to a timestamped file in the extras/ folder."""
-    SAVE_DIR.mkdir(exist_ok=True)
-
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    filename = f"{label}_{timestamp}.html"
-    filepath = SAVE_DIR / filename
+def save_raw_html(content: str, filename_template: str = RAW_HTML_TEMPLATE) -> str:
+    """Save raw HTML content to a timestamped file."""
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    filepath = OUTPUT_DIR / filename_template.format(timestamp=timestamp)
 
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
 
-    print(f"[+] HTML saved to {filepath}")
+    print(f"✅ Raw HTML saved to {filepath}")
     return str(filepath)
 
 
 def main():
-    print(f"[+] Fetching HTML from {URL}")
-    html = fetch_html(URL)
-    save_html(html, label="homepage")
+    print(f"📥 Requesting: {BASE_URL}")
+    response = requests.get(BASE_URL, headers=HEADERS)
+    response.raise_for_status()
+    html = response.text
+
+    save_raw_html(html)
 
 
 if __name__ == "__main__":
