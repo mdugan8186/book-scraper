@@ -1,73 +1,39 @@
-# scraper/main.py
+# ==== main.py ====
 
-"""
-Main script to scrape live book data from BooksToScrape.
-Step 2: fetch and parse the homepage using extract.py.
-"""
-
-from pathlib import Path
+from time import sleep
 import requests
-from scraper.extract import extract_books_from_html
-from selectolax.parser import HTMLParser
-from datetime import datetime
-import csv
+from config import BASE_URL, HEADERS, REQUEST_DELAY
+from scraper.extract import extract_books_from_html, get_next_page
+from scraper.utils import save_to_csv
 
 
-def get_next_page_url(html: str) -> str | None:
-    """Extract the 'next' page URL from the pagination section."""
-    tree = HTMLParser(html)
-    next_link = tree.css_first("li.next > a")
-
-    if next_link:
-        return next_link.attributes["href"]
-    return None
-
-
-BASE_URL = "https://books.toscrape.com/"
-
-
-def fetch_page(url: str) -> str:
-    response = requests.get(url)
+def fetch_html(url: str) -> str:
+    response = requests.get(url, headers=HEADERS)
     response.raise_for_status()
     return response.text
 
 
-def main():
-    url = BASE_URL
+def scrape_all_books(start_url: str = BASE_URL) -> list[dict]:
     all_books = []
+    next_url = start_url
 
-    while url:
-        print(f"Scraping: {url}")
-        response = requests.get(url)
-        response.raise_for_status()
-
-        html = response.text
+    while next_url:
+        print(f"Scraping: {next_url}")
+        html = fetch_html(next_url)
         books = extract_books_from_html(html)
         all_books.extend(books)
         print(f"  ↳ Extracted {len(books)} books (total: {len(all_books)})")
+        next_url = get_next_page(html, current_url=next_url)
 
-        next_page = get_next_page_url(html)
-        if next_page:
-            # Construct full URL (handle relative links)
-            if "catalogue" not in next_page:
-                next_page = "catalogue/" + next_page
-            url = BASE_URL + next_page
-        else:
-            url = None
+        if REQUEST_DELAY > 0:
+            sleep(REQUEST_DELAY)
 
-    print(f"\n✅ Done. Extracted {len(all_books)} total books.")
+    return all_books
 
-    # Prepare timestamped output filename
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_path = Path("output") / f"books_{timestamp}.csv"
 
-    # Write to CSV
-    with output_path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=all_books[0].keys())
-        writer.writeheader()
-        writer.writerows(all_books)
-
-    print(f"📁 Saved to {output_path}")
+def main():
+    books = scrape_all_books()
+    save_to_csv(books)
 
 
 if __name__ == "__main__":
