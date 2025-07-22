@@ -2,7 +2,7 @@
 
 from time import sleep
 import requests
-from config import BASE_URL, HEADERS, REQUEST_DELAY
+from scraper.config import BASE_URL, HEADERS, REQUEST_DELAY
 from scraper.extract import extract_books_from_html, get_next_page
 from scraper.utils import save_to_csv
 

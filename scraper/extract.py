@@ -6,8 +6,8 @@ and export the results to a timestamped CSV file.
 """
 
 from selectolax.parser import HTMLParser
-from config import BASE_URL, HTML_FILE
-from utils import load_html_from_file, save_to_csv
+from scraper.config import BASE_URL, HTML_FILE
+from scraper.utils import load_html_from_file, save_to_csv
 from urllib.parse import urljoin
 
 
@@ -41,6 +41,18 @@ def extract_books_from_html(html: str) -> list[dict]:
         })
 
     return books
+
+
+def get_next_page(html: str, current_url: str) -> str | None:
+    """Find the absolute URL of the next page, relative to the current page."""
+    tree = HTMLParser(html)
+    next_button = tree.css_first("li.next a")
+
+    if next_button:
+        relative_url = next_button.attributes.get("href", "")
+        return urljoin(current_url, relative_url)
+
+    return None
 
 
 def main():

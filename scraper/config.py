@@ -17,6 +17,9 @@ RAW_HTML_FILENAME = "homepage_{timestamp}.html"
 # Optional: set a delay between requests (if needed for politeness)
 REQUEST_DELAY = 0  # 0 = no delay
 
+# Path to the locally saved HTML file used for parsing in extract.py
+HTML_FILE = Path("extras/homepage_2025-07-17_21-33.html")
+
 # Custom headers (can help prevent blocking in real-world scraping)
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; BookScraperBot/1.0)"

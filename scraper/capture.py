@@ -2,7 +2,7 @@
 
 import requests
 from datetime import datetime
-from config import BASE_URL, HEADERS, RAW_HTML_TEMPLATE, OUTPUT_DIR
+from scraper.config import BASE_URL, HEADERS, RAW_HTML_TEMPLATE, OUTPUT_DIR
 
 
 def save_raw_html(content: str, filename_template: str = RAW_HTML_TEMPLATE) -> str:

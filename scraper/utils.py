@@ -3,7 +3,7 @@
 import csv
 from datetime import datetime
 from pathlib import Path
-from config import OUTPUT_DIR, CSV_FILENAME_TEMPLATE
+from scraper.config import OUTPUT_DIR, CSV_FILENAME_TEMPLATE
 from typing import List, Dict
 
 
