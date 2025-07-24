@@ -10,6 +10,15 @@ from scraper.config import BASE_URL, HTML_FILE
 from scraper.utils import load_html_from_file, save_to_csv
 from urllib.parse import urljoin
 
+# Mapping for converting star rating words to integers
+STAR_RATING_MAP = {
+    "One": 1,
+    "Two": 2,
+    "Three": 3,
+    "Four": 4,
+    "Five": 5
+}
+
 
 def extract_books_from_html(html: str) -> list[dict]:
     """Extract book data from the given HTML using CSS selectors."""
@@ -21,16 +30,20 @@ def extract_books_from_html(html: str) -> list[dict]:
         rel_url = article.css_first("h3 a").attributes.get("href", "")
         product_url = urljoin(BASE_URL, rel_url)
 
-        price = article.css_first("p.price_color").text(
-            strip=True).replace("£", "")
+        # Clean and convert price to float
+        raw_price = article.css_first("p.price_color").text(strip=True)
+        price_str = raw_price.replace("Â", "").replace("£", "")
+        price = float(price_str)
+
         availability = article.css_first(
             "p.instock.availability").text(strip=True)
 
         star_element = article.css_first("p.star-rating")
-        star_rating = ""
+        star_rating = 0  # Default if not found or unknown
         if star_element:
-            star_rating = star_element.attributes.get(
+            rating_str = star_element.attributes.get(
                 "class", "").replace("star-rating", "").strip()
+            star_rating = STAR_RATING_MAP.get(rating_str, 0)
 
         books.append({
             "title": title,
