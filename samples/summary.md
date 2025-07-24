@@ -1,0 +1,25 @@
+# Summary (Generated 2025-07-23 20:56)
+
+✅ No duplicate rows found.
+✅ No missing values detected.
+
+**📚 Total books: 1000**
+
+**💷 Price range: £10.00 - £59.99**
+
+**💰 Average price: £35.07**
+
+
+### 📦 Availability breakdown:
+
+availability
+In stock    1000
+
+### ⭐ Star rating distribution:
+
+rating
+1    226
+2    196
+3    203
+4    179
+5    196
