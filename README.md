@@ -1,117 +1,122 @@
-# 📚 Book Scraper
+# BooksToScrape eCommerce Scraper
 
-A lightweight web scraper for [BooksToScrape.com](https://books.toscrape.com/), designed to collect book data such as title, price, availability, star rating, and product URL. This project uses `Selectolax` for fast HTML parsing and saves data to timestamped CSV files.
+_Structured book catalog → clean CSVs, with pagination and detail enrichment._
 
----
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Last Commit](https://img.shields.io/github/last-commit/mdugan8186/book-scraper)
 
-## 📦 Features
-
-- Extracts book title, price, availability, star rating, and URL
-- Handles pagination to scrape all available books
-- Saves extracted data to clean, timestamped CSV files
-- Post-processes data to remove artifacts, convert price to floats, and map star ratings
-- Includes both raw and cleaned data for transparency
-- Lightweight and easy to extend
+A Python scraper for the [Books to Scrape](https://books.toscrape.com) demo eCommerce site.  
+It navigates categories and pages, extracts book details, and saves clean CSVs for analysis or demos.
 
 ---
 
-## 🛠️ Installation
+## 🔍 Key Features
 
-1. **Clone the repository:**
+- **Pagination** across all catalog pages or a chosen category.
+- **Structured fields**: Title, Price, Availability, Rating, Category, Product URL, Image URL.
+- **Optional product details**: UPC, Tax, Prices incl/excl tax, Stock count, Description.
+- **Clean outputs** saved to `output/books.csv` (CSV format by default).
+- **Simple config** for selectors and fields.
+
+---
+
+## ⚙️ Quick Start
+
+### Prerequisites
+
+- Python **3.10+**
+- Git
+
+### Installation
 
 ```bash
-git clone https://github.com/yourusername/book-scraper.git
+# 1) Clone
+git clone https://github.com/mdugan8186/book-scraper.git
 cd book-scraper
-```
 
-2. **Install dependencies:**
+# 2) (optional) Virtual environment
+python -m venv .venv
+# macOS/Linux:
+source .venv/bin/activate
+# Windows:
+.venv\Scripts\activate
 
-```bash
+# 3) Dependencies
 pip install -r requirements.txt
 ```
 
-Minimum required packages:
-
-```text
-selectolax
-pandas
-requests
-```
-
-(Optionally install `lxml`, `beautifulsoup4`, or `playwright` if you want to extend or adapt scraping features.)
-
----
-
-## 🚀 Usage
-
-### 1. Scrape and save HTML:
+### Run
 
 ```bash
-python3 -m scraper.main
+python main.py
 ```
 
-This will:
-
-- Scrape the entire book catalog
-- Save raw HTML for each page (optional)
-- Output a timestamped CSV in the `output/` folder
-
-### 2. Local extract from HTML:
-
-```bash
-python3 -m scraper.extract
-```
-
-This will:
-
-- Use a saved HTML file
-- Extract book data and export to CSV
-
-### 3. Postprocess cleaned data:
-
-```bash
-python3 postprocess.py
-```
-
-This will:
-
-- Load the latest raw CSV file
-- Remove encoding artifacts
-- Convert prices to floats
-- Map star ratings to integers
-- Save the cleaned file to `samples/`
-- Save summaries to `summary.md` and `summary.txt`
+- Outputs a CSV at: `output/books.csv`
 
 ---
 
-## 📂 Project Structure
+## 📁 Output
+
+- **Default CSV**: `output/books.csv`
+
+**Columns**
 
 ```
-book-scraper/
-├── output/              # Raw extracted CSVs
-├── samples/             # Cleaned and validated CSVs
-├── extras/              # Saved HTML files for offline parsing
-├── scraper/
-│   ├── __init__.py
-│   ├── config.py        # URL, paths, headers
-│   ├── utils.py         # Reusable I/O functions
-│   ├── extract.py       # HTML parsing logic
-│   └── main.py          # Main scraping loop
-├── postprocess.py       # Cleans data, generates summary
-├── run.py               # Entry point for live scrape
-└── README.md
+title, price, availability, rating, category, product_url, image_url, upc, tax, price_excl, price_incl, stock, description
 ```
 
 ---
 
-## ✍️ Author
+## 🧩 Configuration
 
-**Michael Dugan**  
-Built with Python 3.13, Selectolax, and Pandas.  
-For feedback or collaboration, reach out via GitHub or project issues.
+- CSS selectors and parsing logic are defined in the code (or `config.json` if available).
+- Update selectors here if site markup changes.
 
 ---
 
-## 📃 License
+## 🎥 Demo
 
-This project is open-source and available under the [MIT License](LICENSE).
+Example of the scraper output:
+
+![BooksToScrape Output](media/bookstoscrape-scraper.png)
+
+The full dataset is saved as: [`output/books.csv`](output/books.csv)
+
+---
+
+## 🧪 Testing & Dev Notes
+
+See **TESTING.md** for a step-by-step sanity flow, selector maintenance notes, and data-quality checks.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Requests/Playwright/Selenium** (depending on implementation)
+- **BeautifulSoup / lxml / Selectolax** for parsing
+- **pandas** for cleaning (optional)
+- **CSV** outputs
+
+---
+
+## ⚖️ Legal & Ethical Use
+
+This scraper is intended for **educational and demonstration purposes only**.  
+Please review and comply with the target site’s terms of service and robots.txt before using it beyond small-scale testing or portfolio demonstration.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See [`LICENSE`](./LICENSE).
+
+---
+
+## 👤 About
+
+**Mike Dugan** — Python Web Scraper & Automation Developer
+
+- GitHub: [@mdugan8186](https://github.com/mdugan8186)
+- Portfolio Website: https://mdugan8186.github.io/scraping-portfolio/
+- Email: **mdugan8186.work@gmail.com**
