@@ -82,7 +82,7 @@ Example of the scraper output:
 
 ![BooksToScrape Output](media/bookstoscrape-scraper.png)
 
-The full dataset is saved as: [`output/books.csv`](output/books_2025-07-23_20-39-36.csv)
+The full dataset is saved as: [`output/books_2025-07-23_20-39-36.csv`](output/books_2025-07-23_20-39-36.csv)
 
 ---
 
