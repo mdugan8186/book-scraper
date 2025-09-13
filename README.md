@@ -52,13 +52,14 @@ pip install -r requirements.txt
 python main.py
 ```
 
-- Outputs a CSV at: `output/books.csv`
+- Each run creates a new timestamped CSV file in the `output/` folder  
+  (e.g., `books_2025-07-23_20-39-36.csv`). Older files are not overwritten.
 
 ---
 
 ## 📁 Output
 
-- **Default CSV**: `output/books.csv`
+- **Timestamped CSVs** saved in `output/` (e.g., `books_2025-07-23_20-39-36.csv`)
 
 **Columns**
 
@@ -81,7 +82,7 @@ Example of the scraper output:
 
 ![BooksToScrape Output](media/bookstoscrape-scraper.png)
 
-The full dataset is saved as: [`output/books.csv`](output/books.csv)
+The full dataset is saved as: [`output/books.csv`](output/books_2025-07-23_20-39-36.csv)
 
 ---
 
