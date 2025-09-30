@@ -49,7 +49,7 @@ pip install -r requirements.txt
 ### Run
 
 ```bash
-python main.py
+python run.py
 ```
 
 - Each run creates a new timestamped CSV file in the `output/` folder  
